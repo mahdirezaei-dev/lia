@@ -14,7 +14,29 @@ class ProductControllerTest extends TestCase
 {
     use DatabaseMigrations;
 
-    
+        protected $data = [
+            'name' => 'mahdi',
+            'email' => 'mahdi@mail.com',
+            'password' => '12345678'
+    ];
+
+    /** @test */
+    public function authenticated_user_can_get_all_products(): void
+    {
+        $user = User::create($this->data);
+
+        Product::factory()->count(20)->create();
+
+        $response = $this->withHeaders([
+                'Authorization' => 'Bearer ' . auth()->tokenById($user->id),
+            ])
+            ->getJson(route('products.index'));
+        
+        $this->assertAuthenticatedAs($user, $guard = null);
+        
+        $response->assertJsonCount(20, 'data')
+            ->assertStatus(Response::HTTP_OK);
+    }
     /** @test */
     public function unauthenticated_user_cant_accsees_to_protected_routes(): void
     {
