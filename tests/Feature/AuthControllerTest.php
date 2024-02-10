@@ -113,7 +113,26 @@ class AuthControllerTest extends TestCase
         $this->assertGuest($guard = null);
 
         $response = $this->postJson(route('me'));
-        
+
         $response->assertStatus(401);
+    }
+
+    /** @test */
+    public function unauthenticated_user_can_not_login_without_password(): void
+    {
+        $user = User::create($this->data);
+
+        $response = $this->postJson(route('login'), [
+            'email' => $user->email,
+        ]);
+ 
+        $response->assertJsonValidationErrors(['password'])
+            ->assertJsonStructure([
+                'success',
+                'code',
+                'message',
+                'errors'
+            ])
+            ->assertStatus(422);
     }
 }
