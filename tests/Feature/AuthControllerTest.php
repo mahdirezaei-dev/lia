@@ -90,4 +90,20 @@ class AuthControllerTest extends TestCase
 
         $this->assertGuest($guard = null);
     }
+
+        /** @test */
+    public function authenticated_user_can_see_her_information(): void
+    {
+        $user = User::create($this->data);
+
+        $response = $this->withHeaders([
+                'Authorization' => 'Bearer ' . auth()->tokenById($user->id),
+            ])
+            ->postJson(route('me'));
+
+        $response->assertJson($user->toArray(), $strict = false)
+            ->assertStatus(200);
+
+        $this->assertAuthenticatedAs($user, $guard = null);
+    }
 }
