@@ -56,4 +56,24 @@ class AuthControllerTest extends TestCase
             ])
             ->assertStatus(200);
     }
+
+        /** @test */
+    public function authenticated_user_can_refresh_her_token(): void
+    {
+        $user = User::create($this->data);
+
+        $reponse = $this->withHeaders([
+                'Authorization' => 'Bearer ' . auth()->tokenById($user->id),
+            ])
+            ->postJson(route('refresh'));
+
+        $reponse->assertJsonStructure([
+                'access_token',
+                'token_type',
+                'token_type'
+            ])
+            ->assertStatus(200);
+
+        $this->assertAuthenticatedAs($user, $guard = null);
+    }
 }
