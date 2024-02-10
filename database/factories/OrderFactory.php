@@ -18,10 +18,7 @@ class OrderFactory extends Factory
     {
         return [
             'total_price' => fake()->randomFloat(2, 1, 9999999),
-            'products' => [
-                'id' => \App\Models\Product::inRandomOrder()->first(),
-                'quantity' => fake()->randomDigit()
-            ]
+            'products' => []
         ];
     }
 }
