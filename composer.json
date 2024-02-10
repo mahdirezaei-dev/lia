@@ -11,7 +11,9 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "mongodb/laravel-mongodb": "^4.1",
-        "tymon/jwt-auth": "^2.0"
+        "predis/predis": "^2.2",
+        "tymon/jwt-auth": "^2.0",
+        "yaza/laravel-repository-service": "^4.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
