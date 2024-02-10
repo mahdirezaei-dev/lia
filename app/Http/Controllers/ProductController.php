@@ -1,18 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\ProductRequest;
+use App\Services\Product\ProductService;
 
 class ProductController extends Controller
 {
+
+    /**
+     * Initial related services for this controller
+     */
+    public function __construct(
+        public ProductService $productService,
+    ) {}
+
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function index(): JsonResponse
+    {   
+        return \Cache::remember('products', 100000, function ()  {
+            return $this->productService->all()->toJson();
+        });
     }
 
     /**
