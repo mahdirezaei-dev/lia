@@ -13,3 +13,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'auth',
+    'controller' => App\Http\Controllers\AuthController::class
+], function ($router) {
+    Route::post('login', 'login')->name('login');
+    Route::post('register', 'register')->name('register');
+    Route::post('logout', 'logout')->name('logout');
+    Route::post('refresh', 'refresh')->name('refresh');
+    Route::match(['post', 'get'], 'me', 'me')->name('me');
+});
