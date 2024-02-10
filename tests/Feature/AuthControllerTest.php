@@ -106,4 +106,14 @@ class AuthControllerTest extends TestCase
 
         $this->assertAuthenticatedAs($user, $guard = null);
     }
+
+    /** @test */
+    public function unauthenticated_user_can_not_accsees_to_me_endpoint(): void
+    {
+        $this->assertGuest($guard = null);
+
+        $response = $this->postJson(route('me'));
+        
+        $response->assertStatus(401);
+    }
 }
