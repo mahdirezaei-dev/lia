@@ -21,9 +21,11 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function index(): JsonResponse
+    {   
+        return \Cache::remember('orders', 100000, function ()  {
+            return $this->orderService->all()->toJson();
+        });
     }
 
     /**
