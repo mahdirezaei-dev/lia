@@ -61,6 +61,20 @@ class OrderControllerTest extends TestCase
             ->assertStatus(Response::HTTP_OK);
     }
 
+        /** @test */
+    public function user_can_delete_an_order(){
+        $order = Order::factory()->create();
+
+        $user = User::create($this->data);
+
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . auth()->tokenById($user->id)])->delete(route('orders.destroy', ['order' => $order->id]));
+
+        $response->assertJsonStructure(['message'])
+                ->assertStatus(Response::HTTP_OK);
+
+        $this->assertDatabaseMissing('orders', $order->toArray());
+    }
+
     /** @test */
     public function unauthenticated_user_cant_accsees_to_protected_routes(): void
     {
