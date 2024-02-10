@@ -17,7 +17,7 @@ class OrderController extends Controller
         public OrderService $orderService,
     ) {}
 
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -26,14 +26,6 @@ class OrderController extends Controller
         return \Cache::remember('orders', 100000, function ()  {
             return $this->orderService->all()->toJson();
         });
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -50,14 +42,6 @@ class OrderController extends Controller
     public function show(string|int $id): JsonResponse
     {
         return $this->orderService->findOrFail($id)->toJson();
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Order $order)
-    {
-        //
     }
 
     /**
