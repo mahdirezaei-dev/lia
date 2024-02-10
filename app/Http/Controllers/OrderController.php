@@ -47,9 +47,9 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show(string|int $id): JsonResponse
     {
-        //
+        return $this->orderService->findOrFail($id)->toJson();
     }
 
     /**
