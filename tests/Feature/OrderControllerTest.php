@@ -61,6 +61,35 @@ class OrderControllerTest extends TestCase
             ->assertStatus(Response::HTTP_OK);
     }
 
+    /** @test */
+    public function user_can_create_a_new_order(){
+
+        $products = Product::factory()->count(3)->create();
+
+        $order = [
+            'products' => [],
+            'total_price' => 100.22
+        ];
+        foreach ($products as $key => $value) {
+           $order['products'][] = [
+                'id' => $value->id,
+                'quantity' => 1,
+           ];
+        }
+
+        $user = User::create($this->data);
+
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . auth()->tokenById($user->id)])
+                ->postJson(
+                    route('orders.store'),
+                    $order
+                )
+                ->assertJsonStructure(['data' => ['products', 'total_price']])
+                ->assertStatus(Response::HTTP_CREATED);
+
+        $this->assertDatabaseHas('orders', $order);
+    }
+
         /** @test */
     public function user_can_delete_an_order(){
         $order = Order::factory()->create();
