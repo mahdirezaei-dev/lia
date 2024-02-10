@@ -135,4 +135,25 @@ class AuthControllerTest extends TestCase
             ])
             ->assertStatus(422);
     }
+
+    /** @test */
+    public function unauthenticated_user_can_not_register_without_confirm_password(): void
+    {
+        $user = [
+            'name' => 'mahdi',
+            'email' => 'mahdi@mail.com',
+            'password' => '12345678',
+        ];
+
+        $response = $this->postJson(route('register'), $user);
+ 
+        $response->assertJsonValidationErrors(['password'])
+            ->assertJsonStructure([
+                'success',
+                'code',
+                'message',
+                'errors'
+            ])
+            ->assertStatus(422);
+    }
 }
