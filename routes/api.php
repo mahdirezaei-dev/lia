@@ -25,3 +25,7 @@ Route::group([
     Route::post('refresh', 'refresh')->name('refresh');
     Route::match(['post', 'get'], 'me', 'me')->name('me');
 });
+
+Route::group(['middleware' => 'auth:api'], function(){
+    Route::apiResource('products', \App\Http\Controllers\ProductController::class);
+});
