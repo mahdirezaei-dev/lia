@@ -91,6 +91,34 @@ class OrderControllerTest extends TestCase
     }
 
         /** @test */
+    public function user_can_update_an_existing_order(){
+
+        $products = Product::factory()->count(3)->create();
+        $existing_order = Order::factory()->create();
+
+        $order = [
+            'products' => [],
+            'total_price' => 100.22
+        ];
+        foreach ($products as $key => $value) {
+           $order['products'][] = [
+                'id' => $value->id,
+                'quantity' => 1,
+           ];
+        }
+
+        $user = User::create($this->data);
+
+        $this->withHeaders(['Authorization' => 'Bearer ' . auth()->tokenById($user->id)])
+                ->patchJson(route('orders.update', ['order' => $existing_order->id]), $order)
+                // ->assertJsonStructure(['data' => ['products', 'total_price']])
+                ->assertStatus(Response::HTTP_OK);
+
+        $this->assertDatabaseMissing('orders', $existing_order->toArray());
+        $this->assertDatabaseHas('orders', $order);
+    }
+
+        /** @test */
     public function user_can_delete_an_order(){
         $order = Order::factory()->create();
 

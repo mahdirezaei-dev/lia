@@ -27,6 +27,7 @@ class ProductController extends Controller
         return \Cache::remember('products', 100000, function ()  {
             return $this->productService->all()->toJson();
         });
+
     }
 
     /**
@@ -60,4 +61,5 @@ class ProductController extends Controller
     {
         return $this->productService->delete($id)->toJson();
     }
+
 }

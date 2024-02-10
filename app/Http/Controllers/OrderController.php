@@ -17,7 +17,6 @@ class OrderController extends Controller
         public OrderService $orderService,
     ) {}
 
-
     /**
      * Display a listing of the resource.
      */
@@ -51,7 +50,6 @@ class OrderController extends Controller
     {
         return $this->orderService->update($id, $request->validated())->toJson();
     }
-
 
     /**
      * Remove the specified resource from storage.

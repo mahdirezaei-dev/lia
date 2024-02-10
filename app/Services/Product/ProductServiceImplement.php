@@ -21,8 +21,6 @@ class ProductServiceImplement extends Service implements ProductService{
     public function all(): ProductServiceImplement
     {
         try {
-            $result = $this->productRepository->all();
-
             return $this->setResult(
                 ProductResource::collection(
                     $this->productRepository->all()

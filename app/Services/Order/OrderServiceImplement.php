@@ -51,8 +51,7 @@ class OrderServiceImplement extends Service implements OrderService{
     public function findOrFail($id): OrderServiceImplement
     {
         try {
-            $result = $this->orderRepository->findOrFail($id);
-            return $this->setResult($result)
+            return $this->setResult($this->orderRepository->findOrFail($id))
                 ->setCode(Response::HTTP_OK)
                 ->setStatus(true);
         } catch (\Exception $exception) {
