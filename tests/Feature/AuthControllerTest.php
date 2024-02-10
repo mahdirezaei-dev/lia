@@ -76,4 +76,18 @@ class AuthControllerTest extends TestCase
 
         $this->assertAuthenticatedAs($user, $guard = null);
     }
+
+        /** @test */
+    public function authenticated_user_can_logout(): void
+    {
+        $user = User::create($this->data);
+
+        $this->withHeaders([
+                'Authorization' => 'Bearer ' . auth()->tokenById($user->id),
+            ])
+            ->postJson(route('logout'))
+            ->assertStatus(200);
+
+        $this->assertGuest($guard = null);
+    }
 }
