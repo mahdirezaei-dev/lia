@@ -31,9 +31,9 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(OrderRequest $request): JsonResponse
     {
-        //
+        return $this->orderService->create($request->validated())->toJson();
     }
 
     /**
@@ -47,10 +47,11 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Order $order)
+    public function update(OrderRequest $request, string|int $id): JsonResponse
     {
-        //
+        return $this->orderService->update($id, $request->validated())->toJson();
     }
+
 
     /**
      * Remove the specified resource from storage.
