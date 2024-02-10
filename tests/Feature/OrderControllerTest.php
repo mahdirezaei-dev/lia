@@ -22,7 +22,7 @@ class OrderControllerTest extends TestCase
     ];
 
     /** @test */
-    public function authenticated_user_can_get_all_products(): void
+    public function authenticated_user_can_get_all_orders(): void
     {
         $user = User::create($this->data);
 
@@ -36,6 +36,28 @@ class OrderControllerTest extends TestCase
         $this->assertAuthenticatedAs($user, $guard = null);
         
         $response->assertJsonCount(20, 'data')
+            ->assertStatus(Response::HTTP_OK);
+    }
+
+    /** @test */
+    public function authenticated_user_can_get_an_order(): void
+    {
+        $user = User::create($this->data);
+
+        $order = Order::factory()->create();
+
+        $response = $this->withHeaders([
+                'Authorization' => 'Bearer ' . auth()->tokenById($user->id),
+            ])
+            ->getJson(route('orders.show', ['order' => $order->id]));
+        
+        $this->assertAuthenticatedAs($user, $guard = null);
+
+        $response->assertJsonStructure([
+            'success',
+            'code',
+            'message',
+            ])
             ->assertStatus(Response::HTTP_OK);
     }
 
