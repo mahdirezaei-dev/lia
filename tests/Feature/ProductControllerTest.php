@@ -83,6 +83,28 @@ class ProductControllerTest extends TestCase
     }
 
     /** @test */
+    public function user_can_update_an_existing_product(){
+
+        $existing_product = Product::factory()->create();
+
+        $product = [
+            'name' => 'Jan Doe',
+            'price' => 2.2,
+            'inventory' => 10,
+        ];
+
+        $user = User::create($this->data);
+
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . auth()->tokenById($user->id)])
+                ->patchJson(route('products.update', ['product' => $existing_product->id]), $product)
+                ->assertJsonStructure(['data' => ['name','price', 'inventory']])
+                ->assertStatus(Response::HTTP_OK);
+
+        $this->assertDatabaseMissing('products', $existing_product->toArray());
+        $this->assertDatabaseHas('products', $product);
+    }
+
+    /** @test */
     public function unauthenticated_user_cant_accsees_to_protected_routes(): void
     {
         $product = Product::factory()->create();
