@@ -37,6 +37,29 @@ class ProductControllerTest extends TestCase
         $response->assertJsonCount(20, 'data')
             ->assertStatus(Response::HTTP_OK);
     }
+    
+    /** @test */
+    public function authenticated_user_can_get_a_product(): void
+    {
+        $user = User::create($this->data);
+
+        $product = Product::factory()->create();
+
+        $response = $this->withHeaders([
+                'Authorization' => 'Bearer ' . auth()->tokenById($user->id),
+            ])
+            ->getJson(route('products.show', ['product' => $product->id]));
+        
+        $this->assertAuthenticatedAs($user, $guard = null);
+
+        $response->assertJsonStructure([
+            'success',
+            'code',
+            'message',
+            ])
+            ->assertStatus(Response::HTTP_OK);
+    }
+
     /** @test */
     public function unauthenticated_user_cant_accsees_to_protected_routes(): void
     {

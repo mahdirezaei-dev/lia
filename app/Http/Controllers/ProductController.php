@@ -30,35 +30,19 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request): JsonResponse
     {
-        //
+        return $this->productService->create($request->validated())->toJson();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(string|int $id): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
+        return $this->productService->findOrFail($id)->toJson();
     }
 
     /**
