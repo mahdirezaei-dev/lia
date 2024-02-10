@@ -35,4 +35,24 @@ class AuthControllerTest extends TestCase
             ])
             ->assertStatus(200);
     }
+
+        /** @test */
+    public function unauthenticated_user_can_login(): void
+    {
+        $user = User::create($this->data);
+
+        $response = $this->postJson(route('login'), [
+            'email' => $this->data['email'],
+            'password' => $this->data['password'],
+        ]);
+ 
+        $this->assertAuthenticatedAs($user, $guard = null);
+
+        $response->assertJsonStructure([
+                'access_token',
+                'token_type',
+                'token_type'
+            ])
+            ->assertStatus(200);
+    }
 }
