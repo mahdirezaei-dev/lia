@@ -145,4 +145,32 @@ class OrderControllerTest extends TestCase
         $this->putJson(route('orders.update', ['order' => $order->id]))->assertStatus(Response::HTTP_UNAUTHORIZED);    
         $this->deleteJson(route('orders.destroy', ['order' => $order->id]))->assertStatus(Response::HTTP_UNAUTHORIZED);    
     }
+    /** @test */
+    public function quantity_of_products_in_an_order_cannot_exceed_the_stock(){
+        $products = Product::create([
+            'name' => 'Samsoung A20 Mobile',
+            'inventory' => 5,
+            'price' => 3,
+        ]);
+
+        $order = [
+            'products' => [
+                'id' => $products->id,
+                'quantity' => $products->inventory + 1
+            ],
+            'total_price' => 100.22
+        ];
+
+
+        $user = User::create($this->data);
+
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . auth()->tokenById($user->id)])
+                ->postJson(
+                    route('orders.store'),
+                    $order
+                )
+                ->assertStatus(422);
+
+        $this->assertDatabaseMissing('orders', $order);
+    }
 }
