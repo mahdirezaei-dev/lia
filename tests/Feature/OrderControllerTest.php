@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Product;
 use App\Models\User;
-use App\Models\Product;
+use App\Models\Order;
 
 class OrderControllerTest extends TestCase
 {

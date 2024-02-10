@@ -1,12 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\OrderRequest;
+use App\Services\Order\OrderService;
 
 class OrderController extends Controller
 {
+    /**
+     * Initial related services for this controller
+     */
+    public function __construct(
+        public OrderService $orderService,
+    ) {}
+
+    
     /**
      * Display a listing of the resource.
      */
