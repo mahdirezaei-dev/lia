@@ -16,4 +16,23 @@ class AuthControllerTest extends TestCase
         'password' => '12345678',
         'password_confirmation' => '12345678',
     ];
+
+    /** @test */
+    public function unauthenticated_user_can_register(): void
+    {
+
+        $response = $this->postJson(
+            route('register'),
+            $this->data
+        );
+ 
+        $this->assertAuthenticated($guard = null);
+        
+        $response->assertJsonStructure([
+                'access_token',
+                'token_type',
+                'token_type'
+            ])
+            ->assertStatus(200);
+    }
 }
